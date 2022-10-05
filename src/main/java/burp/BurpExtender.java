@@ -94,7 +94,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         private final boolean editable;
         private final ITextEditor txtInput;
         private byte[] currentMessage;
-        private final byte[] serializeMagic = new byte[]{-84, -19};
+        //private final byte[] serializeMagic = new byte[]{-84, -19};
+        private final byte[] serializeMagic = new byte[]{(byte) 0xAC, (byte) 0xED};
         private byte[] crap;
 
         public SerializedJavaInputTab(IMessageEditorController controller, boolean editable) {
@@ -123,7 +124,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         @Override
         public boolean isEnabled(byte[] content, boolean isRequest) {
             // enable this tab for requests containing the serialized "magic" header
-            return helpers.indexOf(content, serializeMagic, false, 0, content.length) > -1;
+            //return helpers.indexOf(content, serializeMagic, false, 0, content.length) > -1;
+            return utils.indexOf(content, serializeMagic) > -1;
         }
 
         @Override
@@ -133,7 +135,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
                 txtInput.setEditable(false);
             } else {
                 // save offsets
-                int magicPos = helpers.indexOf(content, serializeMagic, false, 0, content.length);
+                int magicPos = utils.indexOf(content, serializeMagic);
                 int messageBody = helpers.analyzeRequest(content).getBodyOffset();
 
                 // get serialized data

@@ -25,3 +25,15 @@ Any changes made to the JSON will serialize back once you switch to a different 
 **Please note that if you mess up the JSON schema or edit an object in a funny way, the re-serialization will fail and the error will be displayed in the Dashboard tab**
 
 In case you need to add more JARs, right click anywhere and select "BurpJDSer-ng: Reload JARs"
+
+
+## Build
+./gradlew clean
+./gradlew build
+./gradlew shadowJar
+
+Jars in ./build/libs/.
+
+Build with custom JDK: 
+./gradlew build -Dorg.gradle.java.home=/path/to/jdk
+./gradlew shadowJar -Dorg.gradle.java.home=/path/to/jdk
