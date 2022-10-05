@@ -29,11 +29,16 @@ In case you need to add more JARs, right click anywhere and select "BurpJDSer-ng
 
 ## Build
 ./gradlew clean
+
 ./gradlew build
+
 ./gradlew shadowJar
+
 
 Jars in ./build/libs/.
 
 Build with custom JDK: 
 ./gradlew build -Dorg.gradle.java.home=/path/to/jdk
+
 ./gradlew shadowJar -Dorg.gradle.java.home=/path/to/jdk
+
