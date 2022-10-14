@@ -30,15 +30,15 @@ In case you need to add more JARs, right click anywhere and select "BurpJDSer-ng
 ## Build
 ./gradlew clean
 
-./gradlew build
-
 ./gradlew shadowJar
 
-
-Jars in ./build/libs/.
+Jars located in ./build/libs/.
 
 Build with custom JDK: 
-./gradlew build -Dorg.gradle.java.home=/path/to/jdk
-
 ./gradlew shadowJar -Dorg.gradle.java.home=/path/to/jdk
 
+
+For the the extension be able to access internal Java classes that are protected, add something like this to BurpSuitePro.vmoptions:
+--add-opens=java.base/java.util=ALL-UNNAMED
+
+You may need to add several lines with different class paths.

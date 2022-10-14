@@ -3,6 +3,10 @@ package burp;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JettisonMappedXmlDriver;
 import org.codehaus.jettison.util.StringIndenter;
+import org.codehaus.jettison.AbstractXMLStreamReader;
+import org.codehaus.jettison.mapped.MappedXMLStreamReader;
+import org.codehaus.jettison.json.JSONObject;
+import com.thoughtworks.xstream.security.AnyTypePermission;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -21,7 +25,7 @@ public class Utils {
 
     protected ClassLoader loader;
     public final String LIB_DIR = "./libs/";
-    private XStream xstream = new XStream(new JettisonMappedXmlDriver());
+    private XStream xstream = new XStream();
 
     Utils(IExtensionHelpers helpers, IBurpExtenderCallbacks callbacks) {
         this.helpers = helpers;
@@ -31,11 +35,12 @@ public class Utils {
 
     byte[] Serialize(byte[] content) throws Exception {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        xstream.addPermission(AnyTypePermission.ANY);
         xstream.setClassLoader(getSharedClassLoader());
         ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
-        objectOutputStream.writeObject(xstream.fromXML(helpers.bytesToString(content)));
+        String xml = helpers.bytesToString(content).replace("\n", "");
+        objectOutputStream.writeObject(xstream.fromXML(xml));
         objectOutputStream.flush();
-
         return byteArrayOutputStream.toByteArray();
     }
 
@@ -49,10 +54,7 @@ public class Utils {
             try {
                 customLoaderObjectInputStream = new CustomLoaderObjectInputStream(bais, loader);
                 Object obj = customLoaderObjectInputStream.readObject();
-                String json = xstream.toXML(obj);
-                json = new StringIndenter(json).result();
-
-                content = json.getBytes();
+                content = helpers.stringToBytes(xstream.toXML(obj));
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(BurpExtender.class.getName()).log(Level.SEVERE, null, ex);
                 content = helpers.stringToBytes("Cloud not serialize class.\nEither the input is malformed or you're missing some JARs\n\n" + getStackTrace(ex));

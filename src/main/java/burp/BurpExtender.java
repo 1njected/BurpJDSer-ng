@@ -39,7 +39,7 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         this._stdout = new PrintStream(callbacks.getStdout());
 
         // set our extension name
-        callbacks.setExtensionName("BurpJDSer-ng by omerc.net");
+        callbacks.setExtensionName("BurpJDSer-ng by omerc.net (@1njected patch)");
 
         // register ourselves as a message editor tab factory
         callbacks.registerContextMenuFactory(this);
@@ -94,8 +94,8 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IC
         private final boolean editable;
         private final ITextEditor txtInput;
         private byte[] currentMessage;
-        //private final byte[] serializeMagic = new byte[]{-84, -19};
-        private final byte[] serializeMagic = new byte[]{(byte) 0xAC, (byte) 0xED};
+        private final byte[] serializeMagic = new byte[]{-84, -19};
+        //private final byte[] serializeMagic = new byte[]{(byte) 0xAC, (byte) 0xED};
         private byte[] crap;
 
         public SerializedJavaInputTab(IMessageEditorController controller, boolean editable) {
